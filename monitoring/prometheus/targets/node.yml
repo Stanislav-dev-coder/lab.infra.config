@@ -1,0 +1,4 @@
+- targets:
+    - monitoring.incus:9100
+  labels:
+    env: lab

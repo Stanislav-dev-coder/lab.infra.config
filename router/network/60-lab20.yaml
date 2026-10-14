@@ -1,0 +1,8 @@
+network:
+  version: 2
+  ethernets:
+    enp6s0:
+      dhcp4: true
+      dhcp4-overrides:
+        use-routes: false
+        use-dns: false

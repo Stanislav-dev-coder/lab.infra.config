@@ -1,0 +1,69 @@
+services:
+  grafana:
+    image: grafana/grafana:13.2.4
+    container_name: infra-grafana
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    env_file:
+      - path: .env
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - infra-grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    networks:
+      - infra-monitoring
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  prometheus:
+    image: prom/prometheus:v3.15.0
+    container_name: infra-prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=7d"
+      - "--storage.tsdb.retention.size=5GB"
+    restart: unless-stopped
+    volumes:
+      - infra-prometheus-data:/prometheus
+      - ./prometheus:/etc/prometheus:ro
+    networks:
+      - infra-monitoring
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  node_exporter:
+    image: prom/node-exporter:v1.12.1
+    container_name: infra-node-exporter
+    command:
+      - "--path.rootfs=/host"
+      - "--collector.filesystem.mount-points-exclude=^/(dev|proc|sys|run|var/lib/docker/.+)($$|/)"
+      - "--collector.netdev.device-exclude=^(veth.*|docker.*|br-.*|lo)$$"
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro,rslave
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9100/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  infra-monitoring:
+    name: infra-monitoring
+
+volumes:
+  infra-grafana-data:
+    name: infra-grafana-data
+  infra-prometheus-data:
+    name: infra-prometheus-data

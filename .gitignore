@@ -1,0 +1,70 @@
+# Секреты
+
+.env
+*.env
+!.env.example
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+# Локальные переопределения
+
+docker-compose.override.yml
+compose.override.yml
+
+# Временные файлы
+
+*.log
+*.tmp
+*.bak
+*.orig
+*.rej
+
+# macOS
+
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+
+*~
+.directory
+.Trash-*
+.nfs*
+
+# VS Code
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.history/
+
+# JetBrains
+
+.idea/
+*.iml
+
+# Vim и Neovim
+
+*.swp
+*.swo
+*.un~
+Session.vim
+.netrwhist
+
+# Emacs
+
+\#*\#
+.\#*
