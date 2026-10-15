@@ -1,4 +1,5 @@
 - targets:
+    - router.incus:9100
     - monitoring.incus:9100
     - gitlab.incus:9100
     - runner.incus:9100
