@@ -1,0 +1,2 @@
+include:
+  - ../common/node-exporter/compose.yml
