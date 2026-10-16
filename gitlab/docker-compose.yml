@@ -10,6 +10,7 @@ services:
     shm_size: "256m"
     ports:
       - "80:80"
+      - "5050:5050"
     volumes:
       - infra-gitlab-config:/etc/gitlab
       - infra-gitlab-logs:/var/log/gitlab
@@ -24,6 +25,11 @@ services:
         nginx['real_ip_header'] = 'X-Real-IP'
         gitlab_rails['trusted_proxies'] = ['10.20.0.2']
         prometheus_monitoring['enable'] = false
+        registry_external_url 'https://registry.lab.emptyvessel-playground.ru'
+        registry_nginx['listen_https'] = false
+        registry_nginx['listen_port'] = 5050
+        registry_nginx['real_ip_trusted_addresses'] = ['10.20.0.2']
+        registry_nginx['real_ip_header'] = 'X-Real-IP'
 
 volumes:
   infra-gitlab-config:
