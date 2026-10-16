@@ -54,7 +54,7 @@ server {
 
     client_max_body_size 512m;
 
-    set $gitlab http://gitlab.incus:3000;
+    set $gitlab http://gitlab.incus:80;
 
     location / {
         proxy_pass $gitlab;
