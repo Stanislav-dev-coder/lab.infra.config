@@ -1,2 +1,34 @@
 include:
   - ../common/node-exporter/compose.yml
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:19.5.0-ce.0
+    container_name: infra-gitlab
+    hostname: gitlab.lab.emptyvessel-playground.ru
+    restart: unless-stopped
+    shm_size: "256m"
+    ports:
+      - "80:80"
+    volumes:
+      - infra-gitlab-config:/etc/gitlab
+      - infra-gitlab-logs:/var/log/gitlab
+      - infra-gitlab-data:/var/opt/gitlab
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.lab.emptyvessel-playground.ru'
+        letsencrypt['enable'] = false
+        nginx['listen_https'] = false
+        nginx['listen_port'] = 80
+        nginx['real_ip_trusted_addresses'] = ['10.20.0.2']
+        nginx['real_ip_header'] = 'X-Real-IP'
+        gitlab_rails['trusted_proxies'] = ['10.20.0.2']
+        prometheus_monitoring['enable'] = false
+
+volumes:
+  infra-gitlab-config:
+    name: infra-gitlab-config
+  infra-gitlab-logs:
+    name: infra-gitlab-logs
+  infra-gitlab-data:
+    name: infra-gitlab-data
