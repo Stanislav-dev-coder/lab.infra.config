@@ -1,0 +1,5 @@
+[[runners]]
+[runners.docker]
+image = "alpine:3.22"
+privileged = true
+volumes = ["/certs/client", "/cache"]

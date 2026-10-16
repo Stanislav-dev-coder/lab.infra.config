@@ -1,2 +1,17 @@
 include:
   - ../common/node-exporter/compose.yml
+
+services:
+  gitlab-runner:
+    image: gitlab/gitlab-runner:v19.5.0
+    container_name: infra-gitlab-runner
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - infra-runner-config:/etc/gitlab-runner
+      - ./template.toml:/etc/gitlab-runner-template/template.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  infra-runner-config:
+    name: infra-runner-config
