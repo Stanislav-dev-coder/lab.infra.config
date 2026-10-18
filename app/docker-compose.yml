@@ -1,2 +1,10 @@
 include:
   - ../common/node-exporter/compose.yml
+
+services:
+  app:
+    image: registry.lab.emptyvessel-playground.ru/root/app:latest
+    container_name: app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
