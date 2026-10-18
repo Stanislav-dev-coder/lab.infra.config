@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+#---------Variables---------
+lan="enp5s0"
+platform=10.20.0.1
+router=10.20.0.2
+monitoring=10.20.0.12
+#---------Prepare---------
+nft add table ip segment
+nft delete table ip segment
+nft add table ip segment
+#---------Type filter PREROUTING Chain (for ipv4)---------
+nft add chain ip segment PREROUTING { type filter hook prerouting priority -150 \; policy accept \; }
+nft add rule ip segment PREROUTING iifname != "$lan" accept
+nft add rule ip segment PREROUTING ct state related,established accept
+nft add rule ip segment PREROUTING icmp type echo-request accept
+nft add rule ip segment PREROUTING ip saddr "$platform" udp sport 67 udp dport 68 accept
+nft add rule ip segment PREROUTING ip saddr "$router" tcp dport 22 counter accept
+nft add rule ip segment PREROUTING ip saddr "$monitoring" tcp dport 9100 counter accept
+nft add rule ip segment PREROUTING counter drop
