@@ -98,7 +98,7 @@ server {
     set $app http://app.incus:8080;
 
     location / {
-        proxy_pass $registry;
+        proxy_pass $app;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
