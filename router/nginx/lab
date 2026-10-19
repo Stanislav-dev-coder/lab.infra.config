@@ -21,9 +21,6 @@ server {
     listen 443 ssl default_server;
     server_name _;
 
-    ssl_certificate     /etc/lego/certificates/_.lab.emptyvessel-playground.ru.crt;
-    ssl_certificate_key /etc/lego/certificates/_.lab.emptyvessel-playground.ru.key;
-
     location / {
         default_type text/plain;
         return 200 "router: $host\n";
